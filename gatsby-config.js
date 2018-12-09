@@ -28,8 +28,7 @@ module.exports = {
     {
       resolve: "gatsby-source-discogs",
       options: {
-        key: "<YOUR_API_KEY_HERE>",
-        q: "yellow flowers",
+        token: "qYDmZtPoZAYMXBYnCScAksHPBcBhwazZncNTleON",
       },
     },
     // this (optional) plugin enables Progressive Web App + Offline functionality
