@@ -1,6 +1,6 @@
 module.exports = {
   siteMetadata: {
-    title: 'Gatsby Default Starter',
+    title: 'Vinyl Jukebox',
   },
   plugins: [
     'gatsby-plugin-react-helmet',
@@ -31,6 +31,12 @@ module.exports = {
         token: "qYDmZtPoZAYMXBYnCScAksHPBcBhwazZncNTleON",
       },
     },
+    {
+      resolve: `gatsby-plugin-typography`,
+      options: {
+        pathToConfigModule: `src/utils/typography`,
+      }
+    }
     // this (optional) plugin enables Progressive Web App + Offline functionality
     // To learn more, visit: https://gatsby.app/offline
     // 'gatsby-plugin-offline',
