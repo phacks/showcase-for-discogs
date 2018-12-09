@@ -1,15 +1,21 @@
 const fetch = require("node-fetch")
 const queryString = require("query-string")
 
-exports.sourceNodes = (
-  { actions, createNodeId, createContentDigest },
+exports.sourceNodes = ({
+    actions,
+    createNodeId,
+    createContentDigest
+  },
   configOptions
 ) => {
-  const { createNode } = actions
+  const {
+    createNode
+  } = actions
 
   delete configOptions.plugins
 
   const processRelease = release => {
+    console.log('process release')
     const nodeId = createNodeId(`discogs-release-${release.id}`)
     const nodeContent = JSON.stringify(release)
     const nodeData = Object.assign({}, release, {
@@ -34,16 +40,25 @@ exports.sourceNodes = (
   return (
     // Fetch a response from the apiUrl
     fetch(apiUrl)
-      // Parse the response as JSON
-      .then(response => response.json())
-      // Process the JSON data into a node
-      .then(data => {
-        // For each query result (or 'hit')
-        data.releases.forEach(release => {
-          const nodeData = processRelease(release)
-          // Use Gatsby's createNode helper to create a node from the node data
-          createNode(nodeData)
+    // Parse the response as JSON
+    .then(response => response.json())
+    // Process the JSON data into a node
+    .then(data => {
+      // For each query result (or 'hit')
+      return Promise.all(
+        data.releases.slice(0, 20).map(release => {
+          const releaseApiUrl = `https://api.discogs.com/releases/${release.id}?${apiOptions}`
+  
+          return fetch(releaseApiUrl)
+            .then(response => response.json())
+            // Process the JSON data into a node
+            .then(releaseData => {
+              const nodeData = processRelease(releaseData)
+              // Use Gatsby's createNode helper to create a node from the node data
+              createNode(nodeData)
+            })
         })
-      })
+      )
+    })
   )
 }
