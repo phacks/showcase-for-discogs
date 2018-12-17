@@ -1,31 +1,26 @@
-const fetch = require("node-fetch")
-const queryString = require("query-string")
+const queryString = require('query-string')
+const fetch = require('node-fetch')
 
-exports.sourceNodes = ({
-    actions,
-    createNodeId,
-    createContentDigest
-  },
+exports.sourceNodes = (
+  { actions, createNodeId, createContentDigest },
   configOptions
 ) => {
-  const {
-    createNode
-  } = actions
+  const { createNode } = actions
 
   delete configOptions.plugins
 
-  const processRelease = release => {
-    console.log('process release')
-    const nodeId = createNodeId(`discogs-release-${release.id}`)
-    const nodeContent = JSON.stringify(release)
-    const nodeData = Object.assign({}, release, {
+  // Helper function that processes a photo to match Gatsby's node structure
+  const processItem = item => {
+    const nodeId = createNodeId(`node-${item.id}`)
+    const nodeContent = JSON.stringify(item)
+    const nodeData = Object.assign({}, item, {
       id: nodeId,
       parent: null,
       children: [],
       internal: {
-        type: `DiscogsRelease`,
+        type: `MyItem`,
         content: nodeContent,
-        contentDigest: createContentDigest(release),
+        contentDigest: createContentDigest(item),
       },
     })
 
@@ -36,29 +31,4 @@ exports.sourceNodes = ({
   const apiOptions = queryString.stringify(configOptions)
   // Join apiOptions with the Pixabay API URL
   const apiUrl = `https://api.discogs.com/users/phacks/collection/folders/0/releases?${apiOptions}`
-  // Gatsby expects sourceNodes to return a promise
-  return (
-    // Fetch a response from the apiUrl
-    fetch(apiUrl)
-    // Parse the response as JSON
-    .then(response => response.json())
-    // Process the JSON data into a node
-    .then(data => {
-      // For each query result (or 'hit')
-      return Promise.all(
-        data.releases.slice(0, 20).map(release => {
-          const releaseApiUrl = `https://api.discogs.com/releases/${release.id}?${apiOptions}`
-  
-          return fetch(releaseApiUrl)
-            .then(response => response.json())
-            // Process the JSON data into a node
-            .then(releaseData => {
-              const nodeData = processRelease(releaseData)
-              // Use Gatsby's createNode helper to create a node from the node data
-              createNode(nodeData)
-            })
-        })
-      )
-    })
-  )
 }
