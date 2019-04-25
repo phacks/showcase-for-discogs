@@ -19,7 +19,7 @@ module.exports = {
     {
       resolve: "gatsby-source-discogs",
       options: {
-        token: "qYDmZtPoZAYMXBYnCScAksHPBcBhwazZncNTleON",
+        token: "CcwwegmyQrLTOfWpRatiQevPbecmtLmIWYREcdQQ",
       },
     },
     {

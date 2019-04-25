@@ -9,18 +9,18 @@ exports.sourceNodes = (
 
   delete configOptions.plugins
 
-  // Helper function that processes a photo to match Gatsby's node structure
-  const processItem = item => {
-    const nodeId = createNodeId(`node-${item.id}`)
-    const nodeContent = JSON.stringify(item)
-    const nodeData = Object.assign({}, item, {
+  // Helper function that processes a release to match Gatsby's node structure
+  const processRelease = release => {
+    const nodeId = createNodeId(`node-${release.id}`)
+    const nodeContent = JSON.stringify(release)
+    const nodeData = Object.assign({}, release, {
       id: nodeId,
       parent: null,
       children: [],
       internal: {
-        type: `MyItem`,
+        type: `DiscogsRelease`,
         content: nodeContent,
-        contentDigest: createContentDigest(item),
+        contentDigest: createContentDigest(release),
       },
     })
 
@@ -29,6 +29,6 @@ exports.sourceNodes = (
 
   // Convert the options object into a query string
   const apiOptions = queryString.stringify(configOptions)
-  // Join apiOptions with the Pixabay API URL
+  // Join apiOptions with the Discogs API URL
   const apiUrl = `https://api.discogs.com/users/phacks/collection/folders/0/releases?${apiOptions}`
 }

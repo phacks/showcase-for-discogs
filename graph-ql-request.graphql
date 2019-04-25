@@ -1,0 +1,17 @@
+{
+  allDiscogsRelease {
+    edges {
+      node {
+        title
+        artists {
+        	name
+        }
+        year
+        tracklist {
+          title
+          duration
+        }
+      }
+    }
+  }
+}
