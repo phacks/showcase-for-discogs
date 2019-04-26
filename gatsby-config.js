@@ -2,6 +2,7 @@ module.exports = {
   siteMetadata: {
     title: 'Vinyl Jukebox',
   },
+  pathPrefix: "/showcase-for-discogs",
   plugins: [
     'gatsby-plugin-react-helmet',
     {
