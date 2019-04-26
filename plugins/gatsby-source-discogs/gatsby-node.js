@@ -31,4 +31,23 @@ exports.sourceNodes = (
   const apiOptions = queryString.stringify(configOptions)
   // Join apiOptions with the Discogs API URL
   const apiUrl = `https://api.discogs.com/users/phacks/collection/folders/0/releases?${apiOptions}`
+  return fetch(apiUrl)
+    .then(response => response.json())
+    .then(allReleasesData => {
+      // We have to return an array of promises
+      return Promise.all(
+        allReleasesData.releases.slice(0, 30).map(release => {
+          var singleReleaseApiUrl = `https://api.discogs.com/releases/${release.id}?${apiOptions}`
+
+          return fetch(singleReleaseApiUrl)
+            .then(response => response.json())
+            .then(singleReleasesData => {
+              var nodeData = processRelease(singleReleasesData)
+
+              return createNode(nodeData)
+            })
+        }
+        )
+      )
+    })
 }
