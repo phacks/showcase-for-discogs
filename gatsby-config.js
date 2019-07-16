@@ -2,7 +2,6 @@ module.exports = {
   siteMetadata: {
     title: 'Vinyl Jukebox',
   },
-  pathPrefix: "/showcase-for-discogs",
   plugins: [
     'gatsby-plugin-react-helmet',
     {
@@ -20,7 +19,7 @@ module.exports = {
     {
       resolve: "gatsby-source-discogs",
       options: {
-        token: "CcwwegmyQrLTOfWpRatiQevPbecmtLmIWYREcdQQ",
+        token: process.env.DISCOGS_API_KEY,
       },
     },
     {
